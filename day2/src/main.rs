@@ -1,93 +1,43 @@
 use std::fs;
 
-
-struct Sub {
-    horizontal_pos: i32,
-    depth: i32,
-    aim: i32
-}
-
-impl Sub {
-    fn new() -> Self {
-        Self {
-            horizontal_pos: 0,
-            depth: 0,
-            aim: 0,
-        }
+fn main() {
+    struct Position {
+        x: i32,
+        y: i32,
+        aim: i32,
     }
 
-    fn part1 (&mut self, input: (&str, i32)) {
-        match input {
-            ("forward", val) => {
-                self.horizontal_pos += val;
-            }
-            ("up", val) => {
-                self.depth -= val;
-            }
-            ("down", val) => {
-                self.depth += val;
-            }
-            _ => panic!("panic in part1")
-        }
-    }
+    let mut pos1 = Position { x: 0, y: 0, aim: 0 };
+    let mut pos2 = Position { x: 0, y: 0, aim: 0 };
 
-    fn part2 (&mut self, input: (&str, i32)) {
-        match input {
-            ("forward", val) => {
-                self.horizontal_pos += val;
-                self.depth += self.aim * val;
-            }
-            ("up", val) => {
-                self.aim -= val;
-            }
-            ("down", val) => {
-                self.aim += val;
-            }
-            _ => panic!("panic in part1")
-        }
-    }
-}
-
-fn format_input(input: &str) -> Vec<(&str, i32)> {
-
-    let mut format_input: Vec<(&str, i32)> = vec!();
+    let input = fs::read_to_string("input").expect("Couldn't read file");
     for lines in input.trim().lines() {
         let mut parts = lines.split(' ');
-        let cmd = parts
-            .next()
-            .expect("No string here");
-        let val: i32 = parts
-            .next()
-            .expect("No value here")
-            .parse()
-            .expect("Not an integer");
-        format_input.push((cmd, val));
-    }
-    format_input
-}
+        let cmd = parts.next().unwrap();
+        let val: i32 = parts.next().unwrap().parse().unwrap();
 
+        // Part 1
+        match (cmd, val) {
+            ("forward", val) => pos1.x += val,
+            ("up", val) => pos1.y -= val,
+            ("down", val) => pos1.y += val,
+            _ => panic!(""),
+        }
 
-
-fn main() {
-
-    let input = fs::read_to_string("input")
-        .expect("Couldn't read file");
-
-    let format_input = format_input(&input);
-
-    let mut sub1 =  Sub::new();
-    for i in &format_input {
-
-        sub1.part1(*i);
+        // Part 2
+        match (cmd, val) {
+            ("forward", val) => {
+                pos2.x += val;
+                pos2.y += val * pos2.aim;
+            }
+            ("up", val) => {
+                pos2.aim -= val;
+            }
+            ("down", val) => pos2.aim += val,
+            _ => panic!(""),
+        }
     }
 
-    let mut sub2 =  Sub::new();
-    for i in &format_input {
-
-        sub2.part2(*i);
-    }
-
-    println!("{}", sub1.horizontal_pos * sub1.depth);
-    println!("{}", sub2.horizontal_pos * sub2.depth);
-
+    println!("{}", pos1.x * pos1.y);
+    println!("{}", pos2.x * pos2.y);
 }
