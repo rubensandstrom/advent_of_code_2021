@@ -1,43 +1,48 @@
 use std::fs;
 
-fn main() {
-    struct Position {
-        x: i32,
-        y: i32,
-        aim: i32,
+struct Submarine {
+    x: i32,
+    y: i32,
+    aim: i32,
+}
+
+impl Submarine {
+    fn new() -> Self {
+        Self { x: 0, y: 0, aim: 0 }
     }
+}
 
-    let mut pos1 = Position { x: 0, y: 0, aim: 0 };
-    let mut pos2 = Position { x: 0, y: 0, aim: 0 };
+fn main() {
+    let mut sub_one = Submarine::new();
+    let mut sub_two = Submarine::new();
 
+    // from text file to iter over lines with variable binds for command and value in each line.
     let input = fs::read_to_string("input").expect("Couldn't read file");
     for lines in input.trim().lines() {
-        let mut parts = lines.split(' ');
-        let cmd = parts.next().unwrap();
-        let val: i32 = parts.next().unwrap().parse().unwrap();
+        let mut words = lines.split(' ');
+        let cmd = words.next().unwrap();
+        let val: i32 = words.next().unwrap().parse().unwrap();
 
-        // Part 1
+        // Part one
         match (cmd, val) {
-            ("forward", val) => pos1.x += val,
-            ("up", val) => pos1.y -= val,
-            ("down", val) => pos1.y += val,
-            _ => panic!(""),
+            ("forward", val) => sub_one.x += val,
+            ("up", val) => sub_one.y -= val,
+            ("down", val) => sub_one.y += val,
+            _ => panic!("Not a valid command!"),
         }
 
-        // Part 2
+        // Part two
         match (cmd, val) {
             ("forward", val) => {
-                pos2.x += val;
-                pos2.y += val * pos2.aim;
+                sub_two.x += val;
+                sub_two.y += val * sub_two.aim;
             }
-            ("up", val) => {
-                pos2.aim -= val;
-            }
-            ("down", val) => pos2.aim += val,
-            _ => panic!(""),
+            ("up", val) => sub_two.aim -= val,
+            ("down", val) => sub_two.aim += val,
+            _ => panic!("Not a valid command!"),
         }
     }
 
-    println!("{}", pos1.x * pos1.y);
-    println!("{}", pos2.x * pos2.y);
+    println!("{}", sub_one.x * sub_one.y);
+    println!("{}", sub_two.x * sub_two.y);
 }
