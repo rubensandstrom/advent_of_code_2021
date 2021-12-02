@@ -16,7 +16,6 @@ fn main() {
     let mut sub_one = Submarine::new();
     let mut sub_two = Submarine::new();
 
-    // from text file to iter over lines with variable binds for command and value in each line.
     let input = fs::read_to_string("input").expect("Couldn't read file");
     for lines in input.trim().lines() {
         let mut words = lines.split(' ');
