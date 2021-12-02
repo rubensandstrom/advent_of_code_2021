@@ -1,6 +1,5 @@
 use std::fs;
 fn main() {
-
     // Read in text from input file and make a vec of i32.
     let input: Vec<i32> = fs::read_to_string("input")
         .expect("Couldn't read file")
@@ -16,23 +15,26 @@ fn main() {
 }
 
 // Returns the number of times i is bigger than i-1 in a vec.
-fn inc( input: &Vec<i32>) -> i32 {
-    let mut rv = 0;
+fn inc(input: &Vec<i32>) -> i32 {
+    let mut counter = 0;
     let mut current = input[0];
     for i in input {
         match i - current {
-            x if x > 0 => { rv += 1; current = *i;}
-            _ => { current = *i;}
+            x if x > 0 => {
+                counter += 1;
+                current = *i;
+            }
+            _ => {
+                current = *i;
+            }
         }
-
     }
-    rv
+    counter
 }
 
 // Returns a vec of "three-measurement sliding window".
-fn sum_of_three(input: &Vec <i32>) -> Vec<i32> {
-
-    let mut vec = vec!();
+fn sum_of_three(input: &Vec<i32>) -> Vec<i32> {
+    let mut vec = vec![];
     let mut sum = 0;
     for i in 0..=(input.len() - 3) {
         for j in 0..3 {
@@ -42,7 +44,6 @@ fn sum_of_three(input: &Vec <i32>) -> Vec<i32> {
         sum = 0;
     }
     vec
-
 }
 
 #[cfg(test)]
