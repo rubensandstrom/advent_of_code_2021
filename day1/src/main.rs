@@ -1,4 +1,5 @@
 use std::fs;
+
 fn main() {
     // Read in text from input file and make a vec of i32.
     let input: Vec<i32> = fs::read_to_string("input")
@@ -8,42 +9,29 @@ fn main() {
         .collect();
 
     // Part one.
-    println!("{}", inc(&input));
+    println!("{}", part1(&input));
 
     // Part two.
-    println!("{}", inc(&sum_of_three(&input)));
+    println!("{}", part2(&input));
 }
 
-// Returns the number of times i is bigger than i-1 in a vec.
-fn inc(input: &Vec<i32>) -> i32 {
+// Returns the number of times input[i+1] is bigger than input[i] in a vec.
+fn part1(input: &Vec<i32>) -> i32 {
     let mut counter = 0;
-    let mut current = input[0];
-    for i in input {
-        match i - current {
-            x if x > 0 => {
-                counter += 1;
-                current = *i;
-            }
-            _ => {
-                current = *i;
-            }
-        }
+    for i in input.windows(2) {
+        if i[0] < i[1] { counter += 1; }
     }
     counter
 }
 
-// Returns a vec of "three-measurement sliding window".
-fn sum_of_three(input: &Vec<i32>) -> Vec<i32> {
-    let mut vec = vec![];
-    let mut sum = 0;
-    for i in 0..=(input.len() - 3) {
-        for j in 0..3 {
-            sum += input[i + j];
-        }
-        vec.push(sum);
-        sum = 0;
+// returns number of times input[i+3] is bigger than input[i] in a vec, which is the same as
+// when input[i+1] + input[i+2] + input[i+3] is bigger than input[i] + input[i+1] + input[i+2].
+fn part2(input: &Vec<i32>) -> i32 {
+    let mut counter = 0;
+    for i in input.windows(4) {
+        if i[0] < i[3] { counter += 1; }
     }
-    vec
+    counter
 }
 
 #[cfg(test)]
@@ -52,6 +40,11 @@ mod test {
 
     #[test]
     fn test1() {
-        assert_eq!(sum_of_three(&vec!(1, 2, 3, 4, 5, 6)), vec!(6, 9, 12, 15));
+        assert_eq!(part1(&vec!(1, 2, 3, 4, 5, 6)), 5);
+    }
+
+    #[test]
+    fn test2() {
+        assert_eq!(part2(&vec!(1, 2, 3, 4, 5, 6)), 3);
     }
 }
