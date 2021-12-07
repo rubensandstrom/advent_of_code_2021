@@ -12,7 +12,7 @@ fn main() {
         .map(|x| x.parse::<i32>().unwrap())
         .collect();
 
-    let mut vec: Vec<Vec<(i32, bool)>> = vec![];
+    let mut vec: Vec<Vec<(i32, bool)>> = vec!();
     for lines in input {
         let board = lines
             .split_whitespace()
@@ -23,7 +23,7 @@ fn main() {
     }
 
     let mut win_num = 0;
-    let mut win_board = vec![];
+    let mut win_board = vec!();
     for i in 0..20 {
         let (b, winning_num, winning_board) = new_draw(i * 5, draw.clone(), &mut vec.clone());
         if b == false {
@@ -37,13 +37,12 @@ fn main() {
 
     let mut count = 0;
     for i in 0..win_board.len() {
-        if win_board[i].1 == true {
-            count += 1;
+        if win_board[i].1 == false {
+            count += win_board[i].0;
         }
     }
 
-    println!("{}", count);
-    println!("{}", count * win_num);
+    println!("{}", count*win_num);
 }
 
 fn new_draw(
@@ -54,9 +53,9 @@ fn new_draw(
     let mut bingo = false;
     let mut winning_num: Option<i32> = None;
     let mut winning_board: Option<Vec<(i32, bool)>> = None;
-    for i in 0..5 {
-        for j in 0..boards.len() {
-            for k in 0..boards[0].len() {
+     for i in 0..boards.len(){
+        for j in 0..boards[0].len(){
+            for k in 0..5 {
                 if draw[n + i] == boards[j][k].0 {
                     boards[j][k].1 = true;
                     match check_row(k, boards[j].clone()) || check_col(k, boards[j].clone()) {

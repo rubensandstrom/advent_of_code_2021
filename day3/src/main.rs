@@ -98,7 +98,13 @@ fn main() {
         string.push(nth_most(i, &input))
     }
 
-    println!("{}", string_to_int(&string) * string_to_int(&flip(&string)));
+    println!("{}", string); //101110100110
+    println!("{}", flip(&string)); //010001011111
+
+    println!("{}", string_to_int("101110100110"));
+    println!("{}", string_to_int("010001011111"));
+
+    println!("{}", 2982*1119);
     println!("{}", string_to_int(oxygen(0, input.clone()))); // 2727
     println!("{}", string_to_int(co2_scrub(0, input.clone()))); // 1601
 }
@@ -116,7 +122,7 @@ mod tests {
     }
     #[test]
     fn test2() {
-        assert_ne!('1', nth_most(0, &vec!("1001", "0011", "0101")));
+        assert_ne!('1', nth_most(1, &vec!("1001", "0011", "0101")));
     }
 
     #[test]
