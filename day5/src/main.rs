@@ -24,18 +24,19 @@ fn main() {
         match input {
             Some(line) => {
                 for j in line {
-                    if map.get(&j).unwrap_or(&2) < &2 {
-                        map.insert(j, 2); // We only want to count intersections not how many streams that intersect in a given point.
+                    if map.get(&j).unwrap_or(&2) == &1 {
                         count += 1;
+                        map.insert(j, 2); // We only want to count intersections not how many streams that intersect in a given point.
                     } else {
                         map.insert(j, 1);
                     }
                 }
             }
-            _ => continue,
+            None => {}
         }
     }
 
+    println!("{:?}", map);
     println!("{}", count); // Wrong answer: 1295 to low
                            // wrong answer 6012 to high
 }
@@ -62,6 +63,8 @@ fn vert_or_horiz(line: Vec<(i32, i32)>) -> Option<Vec<(i32, i32)>> {
                 vec.push((i, line[0].1));
             }
         }
+    } else if line[0].0 == line[1].0 && line[0].1 == line[1].1 {
+        return Some(line);
     } else {
         return None;
     }
@@ -95,13 +98,25 @@ mod test {
     }
     #[test]
     fn test4() {
-        assert_eq!(
-            vert_or_horiz(vec!((5, 9), (1, 9))),
-            Some(vec!((1, 9), (2, 9), (3, 9), (4, 9), (5, 9)))
-        );
+        let mut vec = vec![];
+        for i in 1..=1001 {
+            vec.push((i, 9))
+        }
+        assert_eq!(vert_or_horiz(vec!((1001, 9), (1, 9))), Some(vec));
     }
     #[test]
     fn test5() {
         assert_eq!(vert_or_horiz(vec!((5, 10), (100, 91))), None);
+    }
+    #[test]
+    fn test6() {
+        assert_eq!(
+            vert_or_horiz(vec!((1, 2), (1, 3))),
+            Some(vec!((1, 2), (1, 3)))
+        );
+    }
+    #[test]
+    fn test7() {
+        assert_eq!(vert_or_horiz(vec!((1, 2), (1, 2))), Some(vec!((1, 2))));
     }
 }
